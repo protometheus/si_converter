@@ -81,8 +81,6 @@ def get_conversion_factor() -> str:
 
 	return get_rsp(output, output_factor, "")
 
-	# return output, output_factor, ""
-
 
 
 if __name__ == '__main__':
