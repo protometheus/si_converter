@@ -19,6 +19,10 @@ def get_rsp(output, output_factor, err):
 		"error": err,
 	}
 
+@app.route("/")
+def hello():
+	return {"msg": "Hello, World!"}
+
 @app.route("/units/si")
 def get_conversion_factor() -> str:
 	inp = request.args.get('units')
