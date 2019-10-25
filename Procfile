@@ -1,1 +1,1 @@
-web: python3 __init__.py
+web: FLASK_APP=si_converter.py flask run
