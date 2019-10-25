@@ -1,1 +1,1 @@
-web: python3 si_converter.py
+web: python3 __init__.py
