@@ -3,13 +3,26 @@ from decimal import *
 from math import pi
 from enum import Enum
 from units import *
-from flask import Flask
+from flask import Flask, request
 # from '../units.py' import *
+
+app = Flask(__name__)
+
 
 PRECISION_MULT = '1.00000000000000'
 NON_UNIT_CHARS = "()/*"
 
-def get_conversion_factor(inp: str) -> str:
+def get_rsp(output, output_factor, err):
+	return {
+		"unit_name": output,
+		"multiplicative_factor": output_factor,
+		"error": err,
+	}
+
+@app.route("/units/si")
+def get_conversion_factor() -> str:
+	inp = request.args.get('units')
+
 	if len(inp) == 0:
 		return inp
 
@@ -47,7 +60,7 @@ def get_conversion_factor(inp: str) -> str:
 		# Find the conversion factor for the symbol
 		conversion = get_conversion(name_or_symbol)
 		if not conversion:
-			return "", "", f"invalid name/symbol encountered: {name_or_symbol}"
+			return get_rsp("", "", f"invalid name/symbol encountered: {name_or_symbol}")
 		output += f"{conversion.base_unit}"
 		output_factor += f"({conversion.conversion_value})"
 
@@ -59,23 +72,18 @@ def get_conversion_factor(inp: str) -> str:
 		v = eval(output_factor)
 		output_factor = '{0:.14f}'.format(v)
 	except SyntaxError as err:
-		return "", "", f"unable to evaluate multiplicative factor: {err}"
+		return get_rsp("", "", f"unable to evaluate multiplicative factor: {err}")
 
-	return output, output_factor, ""
+	return get_rsp(output, output_factor, "")
+
+	# return output, output_factor, ""
 
 
 
 
 
 def main():
-	inp = "(L * degree) / minute"
-	# remove all whitespace characters
-	output, output_factor, err = get_conversion_factor(inp)
-	if err != "":
-		print(f"failed to generate conversion factor: {err}")
-
-	print(f"output: {output}")
-	print(f"output_factor: {output_factor}")
+	pass
 
 
 
